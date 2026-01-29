@@ -1,0 +1,118 @@
+{
+	"name": "parentPipeline",
+	"properties": {
+		"activities": [
+			{
+				"name": "ExecuteOnpremIngestion",
+				"type": "ExecutePipeline",
+				"state": "Inactive",
+				"onInactiveMarkAs": "Succeeded",
+				"dependsOn": [],
+				"policy": {
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "pipelineOnpremFiles",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			},
+			{
+				"name": "ExecuteAPIIngestion",
+				"type": "ExecutePipeline",
+				"state": "Inactive",
+				"onInactiveMarkAs": "Succeeded",
+				"dependsOn": [
+					{
+						"activity": "ExecuteOnpremIngestion",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "pipelineAPIIngestion",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			},
+			{
+				"name": "ExecuteIncrementIngestion",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "ExecuteAPIIngestion",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "pipelineIncrementalDataAzureSqlDBToAdls",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			},
+			{
+				"name": "WebMonitoringAlert",
+				"type": "WebActivity",
+				"dependsOn": [
+					{
+						"activity": "ExecuteIncrementIngestion",
+						"dependencyConditions": [
+							"Completed"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"method": "POST",
+					"url": "https://prod-13.northcentralus.logic.azure.com:443/workflows/c836d95d6b12472d966233b959e9b297/triggers/When_an_HTTP_request_is_received/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2FWhen_an_HTTP_request_is_received%2Frun&sv=1.0&sig=ZX3Mln3EromoZR37SPxjAxCMt0ZhV9IDX6QdAkd6MFU",
+					"body": {
+						"value": "{\n    \"pipeline_name\":\"@{pipeline().Pipeline}\",\n    \"run_id\":\"@{pipeline().RunId}\",\n    \"status\":\"@{activity('ExecuteIncrementIngestion').Status}\",\n    \"error\":\"@{if(equals(activity('ExecuteIncrementIngestion').Status,'Failed'),string(activity('ExecuteIncrementIngestion').error),'No error')}\"\n}",
+						"type": "Expression"
+					}
+				}
+			}
+		],
+		"parameters": {
+			"p_mapping_flight": {
+				"type": "object",
+				"defaultValue": "{             \"type\": \"TabularTranslator\",             \"mappings\": [                 {                     \"source\": {                         \"name\": \"flight_id\",                         \"type\": \"String\",                         \"physicalType\": \"String\"                     },                     \"sink\": {                         \"name\": \"flight_id\",                         \"type\": \"String\",                         \"physicalType\": \"UTF8\"                     }                 },                 {                     \"source\": {                         \"name\": \"flight_number\",                         \"type\": \"String\",                         \"physicalType\": \"String\"                     },                     \"sink\": {                         \"name\": \"flight_number\",                         \"type\": \"String\",                         \"physicalType\": \"UTF8\"                     }                 },                 {                     \"source\": {                         \"name\": \"departure_time\",                         \"type\": \"String\",                         \"physicalType\": \"String\"                     },                     \"sink\": {                         \"name\": \"departure_time\",                         \"type\": \"String\",                         \"physicalType\": \"UTF8\"                     }                 },                 {                     \"source\": {                         \"name\": \"arrival_time\",                         \"type\": \"String\",                         \"physicalType\": \"String\"                     },                     \"sink\": {                         \"name\": \"arrival_time\",                         \"type\": \"String\",                         \"physicalType\": \"UTF8\"                     }                 }"
+			},
+			"p_mapping_airline": {
+				"type": "object",
+				"defaultValue": "{             \"type\": \"TabularTranslator\",             \"mappings\": [                 {                     \"source\": {                         \"name\": \"airline_id\",                         \"type\": \"String\",                         \"physicalType\": \"String\"                     },                     \"sink\": {                         \"name\": \"airline_id\",                         \"type\": \"String\",                         \"physicalType\": \"UTF8\"                     }                 },                 {                     \"source\": {                         \"name\": \"airline_name\",                         \"type\": \"String\",                         \"physicalType\": \"String\"                     },                     \"sink\": {                         \"name\": \"airline_name\",                         \"type\": \"String\",                         \"physicalType\": \"UTF8\"                     }                 },                 {                     \"source\": {                         \"name\": \"country\",                         \"type\": \"String\",                         \"physicalType\": \"String\"                     },                     \"sink\": {                         \"name\": \"country\",                         \"type\": \"String\",                         \"physicalType\": \"UTF8\"                     }                 }"
+			},
+			"p_mapping_passenger": {
+				"type": "object",
+				"defaultValue": "{             \"type\": \"TabularTranslator\",             \"mappings\": [                 {                     \"source\": {                         \"name\": \"passenger_id\",                         \"type\": \"String\",                         \"physicalType\": \"String\"                     },                     \"sink\": {                         \"name\": \"passenger_id\",                         \"type\": \"String\",                         \"physicalType\": \"UTF8\"                     }                 },                 {                     \"source\": {                         \"name\": \"full_name\",                         \"type\": \"String\",                         \"physicalType\": \"String\"                     },                     \"sink\": {                         \"name\": \"full_name\",                         \"type\": \"String\",                         \"physicalType\": \"UTF8\"                     }                 },                 {                     \"source\": {                         \"name\": \"gender\",                         \"type\": \"String\",                         \"physicalType\": \"String\"                     },                     \"sink\": {                         \"name\": \"gender\",                         \"type\": \"String\",                         \"physicalType\": \"UTF8\"                     }                 },                 {                     \"source\": {                         \"name\": \"age\",                         \"type\": \"String\",                         \"physicalType\": \"String\"                     },                     \"sink\": {                         \"name\": \"age\",                         \"type\": \"String\",                         \"physicalType\": \"UTF8\"                     }                 },                 {                     \"source\": {                         \"name\": \"country\",                         \"type\": \"String\",                         \"physicalType\": \"String\"                     },                     \"sink\": {                         \"name\": \"country\",                         \"type\": \"String\",                         \"physicalType\": \"UTF8\"                     }                 }"
+			}
+		},
+		"annotations": [],
+		"lastPublishTime": "2026-01-27T13:58:56Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

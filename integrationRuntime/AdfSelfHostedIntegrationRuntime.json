@@ -1,0 +1,6 @@
+{
+	"name": "AdfSelfHostedIntegrationRuntime",
+	"properties": {
+		"type": "SelfHosted"
+	}
+}

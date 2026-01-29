@@ -1,0 +1,17 @@
+{
+	"name": "FileServerSelfHostedOnPrem",
+	"type": "Microsoft.DataFactory/factories/linkedservices",
+	"properties": {
+		"annotations": [],
+		"type": "FileServer",
+		"typeProperties": {
+			"host": "//DESKTOP-KE083QG/on_prem_files",
+			"userId": "azuread\\sumanthbaina",
+			"encryptedCredential": "eyJDcmVkZW50aWFsSWQiOiI4MjY4ODNjMC1lYzA1LTQxNDUtODgzMi03MTAyN2IwNmU1NjkiLCJWZXJzaW9uIjoiMi4wIiwiQ2xhc3NUeXBlIjoiTWljcm9zb2Z0LkRhdGFQcm94eS5Db3JlLkludGVyU2VydmljZURhdGFDb250cmFjdC5DcmVkZW50aWFsU1UwNkNZMTQifQ=="
+		},
+		"connectVia": {
+			"referenceName": "AdfSelfHostedIntegrationRuntime",
+			"type": "IntegrationRuntimeReference"
+		}
+	}
+}
