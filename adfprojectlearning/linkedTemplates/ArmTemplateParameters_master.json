@@ -1,0 +1,45 @@
+{
+	"$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"value": "adfprojectlearning"
+		},
+		"AzureDataLakeStorage1_accountKey": {
+			"value": ""
+		},
+		"FileServerSelfHostedOnPrem_password": {
+			"value": ""
+		},
+		"LinkedServiceAzureSqlDatabase_password": {
+			"value": ""
+		},
+		"AzureDataLakeStorage1_properties_typeProperties_url": {
+			"value": "https://adfprojectstoragelearn.dfs.core.windows.net/"
+		},
+		"FileServerSelfHostedOnPrem_properties_typeProperties_host": {
+			"value": "//DESKTOP-KE083QG/on_prem_files"
+		},
+		"FileServerSelfHostedOnPrem_properties_typeProperties_userId": {
+			"value": "azuread\\sumanthbaina"
+		},
+		"LinkedServiceAzureSqlDatabase_properties_typeProperties_server": {
+			"value": "adfprojectsqlserver.database.windows.net"
+		},
+		"LinkedServiceAzureSqlDatabase_properties_typeProperties_database": {
+			"value": "adfprojectsqldb"
+		},
+		"LinkedServiceAzureSqlDatabase_properties_typeProperties_userName": {
+			"value": "adminadmin"
+		},
+		"linkedServiceHTTP_properties_typeProperties_url": {
+			"value": "https://raw.githubusercontent.com/"
+		},
+		"containerUri": {
+			"value": ""
+		},
+		"containerSasToken": {
+			"value": ""
+		}
+	}
+}
