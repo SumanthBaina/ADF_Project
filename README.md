@@ -1,7 +1,7 @@
 # End-to-End Azure Data Engineering Project: Airline Analytics Lakehouse
 
 ## Project Overview
-This project demonstrates a full-scale **Hybrid Data Lakehouse** solution built on Azure. It ingests flight data from diverse sources (On-Premises SQL, Local CSVs, and REST APIs), processes it using a **Medallion Architecture** (Bronze, Silver, Gold), and visualizes insights via **Power BI**.
+This project demonstrates a full-scale **Hybrid Data Lakehouse** solution built on Azure. It ingests flight data from diverse sources (On-Premises Local CSVs,Azure SQL DB Tables and REST APIs), processes it using a **Medallion Architecture** (Bronze, Silver, Gold), and visualizes insights via **Power BI**.
 
 The solution is designed to handle **Schema Drift**, **Incremental Loading**, and **Network Isolation** using Self-Hosted Integration Runtimes.
 
