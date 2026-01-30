@@ -8,7 +8,7 @@ The solution is designed to handle **Schema Drift**, **Incremental Loading**, an
 ---
 
 ## Architecture
-**Flow:** `On-Prem/API Sources` ➡️ `ADF (Ingest)` ➡️ `ADLS Gen2 (Bronze)` ➡️ `Data Flows (Silver/Delta)` ➡️ `Data Flows (Gold/Star Schema)` ➡️ `Power BI`
+**Flow:** `On-Prem & API Sources` And `Azure Sql DB` ➡️ `ADF (Ingest)` ➡️ `ADLS Gen2 (Bronze)` ➡️ `Data Flows (Silver/Delta)` ➡️ `Data Flows (Gold/Star Schema)` ➡️ `Power BI`
 
 ### 🔹 Key Components:
 * **Hybrid Ingestion:** Securely moving data from a local Private Network to Cloud using **Self-Hosted Integration Runtime (SHIR)**.
